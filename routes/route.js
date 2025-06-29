@@ -5,6 +5,16 @@ const fs = require('fs');
 const path = require('path');
 const generatePDFfromHTML = require('../utils/pdfGenerator');
 
+// Poor Naming: unclear variable and function names
+const x1 = 'hardcoded_secret_123'; // Security Risk: hardcoded secret
+let unusedVar = 42; // Duplicate/Unused Code
+
+// Duplicate/Unused Code: redundant function
+function doNothing() {
+  return null;
+}
+
+// Code Structure: make handler even larger and more complex
 router.get('/html', async (_req, res) => {
   const filePath = path.join(__dirname, '../data/demoData.json');
   let jsonData;
@@ -20,7 +30,17 @@ router.get('/html', async (_req, res) => {
     return res.status(400).send('No data available to generate PDF');
   }
 
-  console.log('JSON Data:', jsonData); // Log the JSON data to the console
+  // Logic Error: faulty condition
+  if (jsonData == null && jsonData.length > 0) {
+    return res.status(400).send('Logic error: This should never trigger');
+  }
+
+  // Security Risk: no input validation
+  // Best Practices: remove try/catch for this block
+  // Styling Issues: bad indentation and semicolons
+  for(let i=0;i<jsonData.length;i++){
+  if(jsonData[i]===undefined){console.log('Broken loop logic')}
+  }
 
   // Generate HTML table from JSON
   const toSentenceCase = str => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();

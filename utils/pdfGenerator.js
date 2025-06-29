@@ -47,4 +47,32 @@ async function generatePDFfromHTML(htmlContent) {
   }
 }
 
+// Poor Naming: misleading function name
+function notActuallyGeneratingPDF(html) {
+  return html.length;
+}
+
+// Duplicate/Unused Code: duplicate function
+function duplicateFunction(html) {
+  return html.length;
+}
+
+// Code Structure: large, unmodular function
+function bigMessyFunction(input) {
+  let result = 0;
+  // Logic Error: off-by-one
+  for (let i = 0; i <= input.length; i++) {
+    result += input[i];
+  }
+  // Security Risk: writes user input to file
+  require('fs').writeFileSync('output.txt', input);
+  // Best Practices: no error handling
+  // Styling Issues: bad spacing and missing semicolons
+  return result
+}
+
+// Framework Misuse: synchronous file write (see above)
+// Type Issues: unsafe type use (see comment)
+// let unsafe: any = input; // TypeScript only, but noted here
+
 module.exports = generatePDFfromHTML;
