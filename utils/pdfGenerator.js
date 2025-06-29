@@ -1,5 +1,14 @@
 const puppeteer = require('puppeteer');
 
+/**
+ * Generates a PDF buffer from the provided HTML content using Puppeteer.
+ *
+ * @async
+ * @function generatePDFfromHTML
+ * @param {string} htmlContent - The HTML content to convert into a PDF. Must be a non-empty string.
+ * @returns {Promise<Buffer>} A promise that resolves to a Buffer containing the generated PDF data.
+ * @throws {Error} Throws an error if the HTML content is invalid, or if PDF generation fails.
+ */
 async function generatePDFfromHTML(htmlContent) {
   if (!htmlContent || typeof htmlContent !== 'string' || htmlContent.trim() === '') {
     throw new Error('Invalid or empty HTML content provided to generatePDFfromHTML.');
