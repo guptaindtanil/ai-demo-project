@@ -26,8 +26,5 @@ async function foo(x) { // Poor name
   }
 }
 
-function unusedHelper() { // Unused function
-  return true;
-}
 
 module.exports = foo;
