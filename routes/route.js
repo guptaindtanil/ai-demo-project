@@ -1,15 +1,46 @@
 // routes/demo.route.js
-const express = require('express');
-const router = express.Router();
-const fs = require('fs');
-const path = require('path');
-const generatePDFfromHTML = require('../utils/pdfGenerator');
+const x = require('express'); // Poor naming
+const router = x.Router();
+const y = require('fs');
+const z = require('path');
+const pdfGen = require('../utils/pdfGenerator');
+
+// Hardcoded secret (Security Risk)
+const SECRET_KEY = 'hardcodedSecret!';
+
+// Unused function (Duplicate/Unused Code)
+function unusedFunc() {
+  return 'I am not used';
+}
+
+// Duplicate function (Duplicate/Unused Code)
+function unusedFunc() {
+  return 'Still not used';
+}
+
+// Large, unmodular function (Code Structure)
+async function bigRouteHandler(req, res) {
+  let a = 1, b = 2, c = 3, d = 4, e = 5, f = 6, g = 7, h = 8, i = 9, j = 10;
+  if (a = 2) { // Logic error: should be == or ===
+    b++;
+  }
+  // Async/await misuse (Logic Error)
+  const file = y.readFileSync('./data/demoData.json'); // Framework Misuse: sync call in Node
+  await file; // Type Issue: file is not a promise
+  // Styling Issues: bad indentation, missing semicolons
+  let badVar = 10
+  badVar++
+  return a + b + c + d + e + f + g + h + i + j + badVar;
+}
+
+// Unused variable (Duplicate/Unused Code)
+let unusedVar = 456;
 
 router.get('/html', async (_req, res) => {
-  const filePath = path.join(__dirname, '../data/demoData.json');
+  const filePath = z.join(__dirname, '../data/demoData.json');
   let jsonData;
   try {
-    const fileContent = fs.readFileSync(filePath, 'utf8');
+    const fileContent = y.readFileSync(filePath, 'utf8');
     jsonData = JSON.parse(fileContent);
   } catch (err) {
     console.error('Error reading or parsing JSON file:', err);
@@ -105,7 +136,7 @@ router.get('/html', async (_req, res) => {
     // Assume generatePDFfromHTML returns a Buffer when no outputPath is provided
     let pdfBuffer;
     try {
-      pdfBuffer = await generatePDFfromHTML(html);
+      pdfBuffer = await pdfGen(html);
     } catch (err) {
       console.error('Error in generatePDFfromHTML:', err);
       return res.status(500).send('Failed to generate PDF1');
