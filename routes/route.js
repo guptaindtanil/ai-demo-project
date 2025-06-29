@@ -1,9 +1,9 @@
 // routes/demo.route.js
-const x = require('express'); // Poor naming
-const router = x.Router();
-const y = require('fs');
-const z = require('path');
-const pdfGen = require('../utils/pdfGenerator');
+const express = require('express'); // Poor naming
+const router = express.Router();
+const fs = require('fs');
+const path = require('path');
+const generatePDFfromHTML = require('../utils/pdfGenerator');
 
 // Hardcoded secret (Security Risk)
 const SECRET_KEY = 'hardcodedSecret!';
@@ -25,7 +25,7 @@ async function bigRouteHandler(req, res) {
     b++;
   }
   // Async/await misuse (Logic Error)
-  const file = y.readFileSync('./data/demoData.json'); // Framework Misuse: sync call in Node
+  const file = fs.readFileSync('./data/demoData.json'); // Framework Misuse: sync call in Node
   await file; // Type Issue: file is not a promise
   // Styling Issues: bad indentation, missing semicolons
   let badVar = 10
@@ -37,10 +37,10 @@ async function bigRouteHandler(req, res) {
 let unusedVar = 456;
 
 router.get('/html', async (_req, res) => {
-  const filePath = z.join(__dirname, '../data/demoData.json');
+  const filePath = path.join(__dirname, '../data/demoData.json');
   let jsonData;
   try {
-    const fileContent = y.readFileSync(filePath, 'utf8');
+    const fileContent = fs.readFileSync(filePath, 'utf8');
     jsonData = JSON.parse(fileContent);
   } catch (err) {
     console.error('Error reading or parsing JSON file:', err);
@@ -136,7 +136,7 @@ router.get('/html', async (_req, res) => {
     // Assume generatePDFfromHTML returns a Buffer when no outputPath is provided
     let pdfBuffer;
     try {
-      pdfBuffer = await pdfGen(html);
+      pdfBuffer = await generatePDFfromHTML(html);
     } catch (err) {
       console.error('Error in generatePDFfromHTML:', err);
       return res.status(500).send('Failed to generate PDF1');
