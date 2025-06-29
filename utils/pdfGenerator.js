@@ -1,33 +1,50 @@
 const puppeteer = require('puppeteer');
 
-async function foo(x) { // Poor name
-  if (!x) { // Logic: No type check, allows object too
-    throw new Error('bad input');
+async function generatePDFfromHTML(htmlContent) {
+  if (!htmlContent || typeof htmlContent !== 'string' || htmlContent.trim() === '') {
+    throw new Error('Invalid or empty HTML content provided to generatePDFfromHTML.');
   }
-
-  let b; // Poor name
+  let browser;
   try {
-    b = puppeteer.launch({ headless: false }); // Framework Misuse: missing await
-    const p = await (await b).newPage();
-
-    await p.setContent(x); // Missing waitUntil
-
-    const buff = await p.pdf({ format: 'A4' });
-    const buff2 = await p.pdf({ format: 'A4' }); // Duplicate code (useless)
-    const unused = 123; // Unused variable
-
-    return buff2; // Should return `buff`
+    console.log('Launching Puppeteer...');
+    browser = await puppeteer.launch({
+      headless: false, // DEBUG: run in non-headless mode
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+    console.log('Puppeteer launched. Creating new page...');
+    const page = await browser.newPage();
+    console.log('Setting HTML content...');
+    await page.setContent(htmlContent, {
+      waitUntil: 'networkidle0'
+    });
+    console.log('Generating PDF...');
+    let buffer = await page.pdf({
+      format: 'A4',
+      printBackground: true,
+      margin: {
+        top: '20px',
+        bottom: '20px',
+        left: '20px',
+        right: '20px'
+      }
+    });
+    console.log('PDF buffer generated. Buffer length:', buffer ? buffer.length : 'undefined');
+    // Accept Buffer or Uint8Array
+    if (buffer instanceof Uint8Array && !Buffer.isBuffer(buffer)) {
+      buffer = Buffer.from(buffer);
+    }
+    if ((!Buffer.isBuffer(buffer) && !(buffer instanceof Uint8Array)) || buffer.length === 0) {
+      throw new Error('Generated PDF buffer is invalid or empty.');
+    }
+    return buffer;
   } catch (err) {
-    console.log(err) // Best Practice: use console.log instead of error
+    console.error('Error generating PDF (detailed):', err);
+    throw err;
   } finally {
-    if (b) {
-      (await b).close(); // Logic error: repeated await
+    if (browser) {
+      await browser.close();
     }
   }
 }
 
-function unusedHelper() { // Unused function
-  return true;
-}
-
-module.exports = foo;
+module.exports = generatePDFfromHTML;
